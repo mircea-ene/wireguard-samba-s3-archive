@@ -54,6 +54,10 @@ t "device config: split tunnel (VPC only)" grep -q '^AllowedIPs = 172.31.0.0/16$
 t "device config: endpoint is the EIP"     grep -q '^Endpoint = 203.0.113.10:51820$' <<<"$cfg"
 t "device config: plain WireGuard (no AmneziaWG)" bash -c '! grep -qE "^(Jc|S1|H1) " <<<"$1"' _ "$cfg"
 t "wg0 interface up in container"     docker exec wg-easy wg show wg0
+if [ "$fail" != 0 ]; then
+  echo "--- wg-easy logs (for debugging failures)"
+  docker logs --tail 40 wg-easy 2>&1 | sed "s/^/      /"
+fi
 echo; echo "checks: $pass passed, $fail failed"
 [ "$fail" = 0 ]
 EOF
