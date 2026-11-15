@@ -28,7 +28,7 @@ docker build -q -t poc-systemd-test -f Dockerfile.systemd . >/dev/null
 docker network create "$NET" >/dev/null
 docker run -d --name "$S3" --network "$NET" -v "$FAKE_S3:/data:ro" rclone/rclone:latest \
   serve s3 /data --addr :9000 --auth-key poc-key,poc-secret-123 >/dev/null
-docker run -d --name "$SRV" --network "$NET" --privileged --cgroupns=host \
+docker run -d --name "$SRV" --network "$NET" --privileged --cgroupns=host --security-opt apparmor=unconfined \
   -v /sys/fs/cgroup:/sys/fs/cgroup:rw --device /dev/fuse \
   --tmpfs /run --tmpfs /run/lock poc-systemd-test >/dev/null
 sleep 3

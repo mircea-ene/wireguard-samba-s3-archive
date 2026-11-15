@@ -40,5 +40,10 @@ for u in alice:team-a bob:team-b carol:team-a,team-b; do
 done
 if bash /share-permissions.sh; then ok "share permission suite"; else bad "share permission suite"; fi
 
+if [ "$fail" != 0 ]; then
+  echo "--- archive mount logs (for debugging failures)"
+  journalctl -u "rclone-archive@*" -n 20 --no-pager 2>&1 | sed "s/^/      /"
+  tail -n 20 /var/log/rclone/*.log 2>&1 | sed "s/^/      /"
+fi
 echo; echo "checks: $pass passed, $fail failed"
 [ "$fail" = 0 ]

@@ -18,7 +18,7 @@ trap cleanup EXIT
 docker rm -f "$VPN" >/dev/null 2>&1 || true
 
 docker build -q -t poc-systemd-test -f Dockerfile.systemd . >/dev/null
-docker run -d --name "$VPN" --privileged --cgroupns=host \
+docker run -d --name "$VPN" --privileged --cgroupns=host --security-opt apparmor=unconfined \
   -v /sys/fs/cgroup:/sys/fs/cgroup:rw --tmpfs /run --tmpfs /run/lock \
   -v /var/lib/docker -v /var/lib/containerd \
   poc-systemd-test >/dev/null
