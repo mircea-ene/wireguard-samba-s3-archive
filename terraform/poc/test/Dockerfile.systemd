@@ -1,0 +1,9 @@
+# Ubuntu 24.04 with systemd as PID 1, close enough to an EC2 boot to run the
+# user-data scripts (apt, systemd units, mounts) end to end.
+FROM ubuntu:24.04
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends systemd systemd-sysv dbus udev kmod \
+ && rm -rf /var/lib/apt/lists/* \
+ && systemctl mask systemd-firstboot.service getty.target console-getty.service
+STOPSIGNAL SIGRTMIN+3
+CMD ["/sbin/init"]
