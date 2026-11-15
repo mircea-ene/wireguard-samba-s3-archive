@@ -98,8 +98,8 @@ instead of templating them), so they run unchanged in Docker:
   unattended settings, logs in to its API, creates a device and checks the
   generated config (endpoint, split-tunnel `AllowedIPs`).
 
-CI runs `terraform fmt`/`validate`,
-ShellCheck and both test suites.
+CI runs `terraform fmt`/`validate` and
+ShellCheck; the user-data tests run locally (they need privileged Docker).
 
 ## Deploy
 
