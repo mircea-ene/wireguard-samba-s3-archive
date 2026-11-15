@@ -1,6 +1,5 @@
 #!/bin/bash
-# Runs the access tests from inside the server container:
-#   docker compose exec server /test.sh
+# SMB access tests, run inside the test container by fileserver-checks.sh.
 # Expects the default test users (alice, bob, carol) and zones (team-a, team-b).
 cd /tmp && echo "day 1 log" > log.txt && echo "MODIFIED" > other.txt && echo "doc" > doc.txt
 S() { u=$1; sh=$2; shift 2; smbclient "//127.0.0.1/$sh" -U "$u%test1234" --client-protection=encrypt -c "$*" 2>&1; }

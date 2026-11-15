@@ -32,13 +32,13 @@ t "archive file visible via mount"     test -f /srv/archive/team-a/contracts/con
 t "add-zone helper works"              /usr/local/sbin/fileserver-add-zone team-c
 t "add-zone rejects bad names"         bash -c '! /usr/local/sbin/fileserver-add-zone "../etc"'
 
-echo "--- share permissions (local/test.sh with throwaway users)"
+echo "--- share permissions (share-permissions.sh with throwaway users)"
 for u in alice:team-a bob:team-b carol:team-a,team-b; do
   name="${u%%:*}"; groups="${u##*:}"
   id "$name" >/dev/null 2>&1 || useradd -M -s /usr/sbin/nologin -G "staff,$groups" "$name"
   printf 'test1234\ntest1234\n' | smbpasswd -s -a "$name" >/dev/null
 done
-if bash /share-test.sh; then ok "share permission suite"; else bad "share permission suite"; fi
+if bash /share-permissions.sh; then ok "share permission suite"; else bad "share permission suite"; fi
 
 echo; echo "checks: $pass passed, $fail failed"
 [ "$fail" = 0 ]

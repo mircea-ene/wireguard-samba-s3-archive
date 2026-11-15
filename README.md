@@ -92,14 +92,13 @@ instead of templating them), so they run unchanged in Docker:
   it is idempotent against an existing volume.
 - **`rclone serve s3`** stands in for the bucket.
 - Throwaway users then run a permission suite over real SMB3 connections
-  (`local/test.sh`): zone isolation, read-only archive, write-once uploads,
+  (`terraform/poc/test/share-permissions.sh`): zone isolation, read-only archive, write-once uploads,
   wrong passwords.
 - The VPN test runs **Docker inside the container**, starts wg-easy with the
   unattended settings, logs in to its API, creates a device and checks the
   generated config (endpoint, split-tunnel `AllowedIPs`).
 
-`local/` holds an earlier single-container version of the file server for
-quick experiments (see its README). CI runs `terraform fmt`/`validate`,
+CI runs `terraform fmt`/`validate`,
 ShellCheck and both test suites.
 
 ## Deploy

@@ -8,9 +8,6 @@ terraform.tfvars
 *.auto.tfvars
 backend.hcl
 
-# Local PoC credentials (env.aws.example is the template)
-local/env.aws
-
 # Test logs
 *.log
 

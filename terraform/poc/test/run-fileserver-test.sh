@@ -1,14 +1,14 @@
 #!/bin/bash
 # Runs templates/fileserver-user-data.sh in a systemd Ubuntu 24.04 container, against a
-# fake S3 (rclone serve s3) holding local/fake-s3, then checks:
+# fake S3 (rclone serve s3) holding test/fake-s3, then checks:
 #   - every service the script sets up is running
-#   - the share permission tests from local/test.sh (with throwaway
+#   - the share permission tests from share-permissions.sh (with throwaway
 #     test users created here only, not by the user-data script)
 # Usage: ./run-fileserver-test.sh [--keep]
 set -euo pipefail
 cd "$(dirname "$0")"
 MVP="$(cd .. && pwd)"
-FAKE_S3="$(cd ../../../local/fake-s3 && pwd)"
+FAKE_S3="$(cd fake-s3 && pwd)"
 NET=poc-test
 SRV=poc-fileserver-test
 S3=poc-fakes3-test
@@ -49,7 +49,7 @@ DATA_DEVICE="$(docker exec "$SRV" bash -c 'truncate -s 2G /ebs.img && losetup -f
 echo "data device: $DATA_DEVICE"
 
 docker cp "$MVP/templates/fileserver-user-data.sh" "$SRV:/fileserver-user-data.sh"
-docker cp ../../../local/test.sh "$SRV:/share-test.sh"
+docker cp share-permissions.sh "$SRV:/share-permissions.sh"
 docker cp fileserver-checks.sh "$SRV:/fileserver-checks.sh"
 
 echo "--- running fileserver-user-data.sh (takes a few minutes)"
