@@ -1,13 +1,10 @@
 # WireGuard + Samba + S3 archive on AWS
 
-A small-office file server in AWS, reachable only over a VPN, with a
-multi-terabyte archive kept in S3 Glacier Instant Retrieval and exposed to
-Windows users as an ordinary read-only network drive.
-
-Built as a proof of concept for moving an office off a shelf of external
-hard drives: employees keep mapping `P:` and `A:` drives like before, the
-archive costs about $5 per TB per month, and nothing on the file server is
-reachable from the internet.
+Office files on external drives, no remote access, no offsite copy.
+This moves them to AWS: employees open the same network drives from
+anywhere over a VPN, finished projects sit in an S3 archive at about $5 per
+TB per month, and nothing on the file server is reachable from the internet.
+One `terraform apply`, ready in about 3 minutes.
 
 ```mermaid
 flowchart LR
