@@ -106,3 +106,18 @@ variable "cockpit_identities_deb_url" {
   description = "45Drives Cockpit Identities plugin package. There is no Ubuntu 24.04 build; the jammy one is architecture independent."
   default     = "https://github.com/45Drives/cockpit-identities/releases/download/v0.1.14-1/cockpit-identities_0.1.14-1jammy_all.deb"
 }
+
+# ---------------------------------------------------------------------------
+# Optional extras (off by default, to keep demos simple)
+# ---------------------------------------------------------------------------
+
+variable "backup_retention_days" {
+  type        = number
+  description = "Daily snapshots of the data volume, kept for this many days. null = no backups."
+  default     = null
+
+  validation {
+    condition     = var.backup_retention_days == null || try(var.backup_retention_days >= 1 && var.backup_retention_days <= 1000 && floor(var.backup_retention_days) == var.backup_retention_days, false)
+    error_message = "backup_retention_days must be a whole number from 1 to 1000, or null."
+  }
+}

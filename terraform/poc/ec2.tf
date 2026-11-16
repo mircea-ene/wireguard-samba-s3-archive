@@ -93,9 +93,9 @@ resource "aws_ebs_volume" "data" {
   size              = var.data_volume_size_gb
   encrypted         = true
 
-  tags = {
+  tags = merge(local.backup_tag, {
     Name = "${local.name_prefix}-fileserver-data"
-  }
+  })
 }
 
 resource "aws_instance" "fileserver" {

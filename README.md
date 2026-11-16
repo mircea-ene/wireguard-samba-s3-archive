@@ -137,6 +137,16 @@ Then:
 
 Tear down with `terraform destroy` (the PoC bucket has `force_destroy`).
 
+## Optional: backups
+
+Off by default to keep demos simple. Set it in `terraform.tfvars`:
+
+| Variable                | Effect when set                                                        |
+|-------------------------|------------------------------------------------------------------------|
+| `backup_retention_days` | Daily snapshot of the data volume at 02:00 UTC (Data Lifecycle Manager), kept this many days. |
+
+- Turning backups off keeps the existing snapshots until you delete them.
+
 ## Cost (eu-central-1, on demand, approximate)
 
 | Item                                 | Per month |
@@ -152,8 +162,8 @@ rclone cache matters for files people open often.
 
 ## PoC limits and next steps
 
-- Data volume 30 GB, no snapshots. Production: larger volume plus daily
-  snapshots via Data Lifecycle Manager.
+- Data volume 30 GB. Production: larger volume, and set
+  `backup_retention_days`.
 - wg-easy UI over plain HTTP, restricted to one IP. Production: TLS in
   front of it, or reach it only through the tunnel.
 - The archive is read-only from the server. Ingest is manual
