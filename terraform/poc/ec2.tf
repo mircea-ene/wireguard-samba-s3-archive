@@ -50,6 +50,8 @@ resource "aws_instance" "vpn" {
     "export WG_CLIENT_CIDR='${var.wg_client_cidr}'",
     # Split tunnel: devices send only VPC traffic through the VPN.
     "export WG_ALLOWED_IPS='${aws_default_vpc.default.cidr_block}'",
+    # VPC DNS server when private DNS is on (see dns.tf).
+    "export WG_DNS='${local.vpn_dns}'",
     "export WG_EASY_IMAGE='${var.wg_easy_image}'",
     "export WG_ADMIN_USER='${var.wg_easy_admin_username}'",
     "export WG_ADMIN_PASSWORD_PARAM='${aws_ssm_parameter.wg_easy_admin_password.name}'",

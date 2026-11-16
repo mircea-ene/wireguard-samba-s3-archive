@@ -144,3 +144,15 @@ variable "s3_monthly_budget_usd" {
   description = "Monthly S3 spend that triggers a budget alert (used only with alarm_email)."
   default     = 20
 }
+
+variable "private_domain" {
+  type        = string
+  description = "Private DNS zone for the file server name (e.g. files.office.internal). VPN devices then use the VPC DNS server. null = no private DNS, devices use 1.1.1.1 and drives are mapped by IP."
+  default     = "office.internal"
+}
+
+variable "fileserver_hostname" {
+  type        = string
+  description = "Host name of the file server in private_domain."
+  default     = "files"
+}

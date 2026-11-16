@@ -28,7 +28,7 @@ docker cp "$MVP/templates/vpn-user-data.sh" "$VPN:/vpn-user-data.sh"
 echo "--- running vpn-user-data.sh"
 docker exec \
   -e AWS_REGION=eu-central-1 -e WG_HOST=203.0.113.10 \
-  -e WG_ALLOWED_IPS=172.31.0.0/16 -e WG_EASY_IMAGE=ghcr.io/wg-easy/wg-easy:15.5.0 \
+  -e WG_ALLOWED_IPS=172.31.0.0/16 -e WG_DNS=172.31.0.2 -e WG_EASY_IMAGE=ghcr.io/wg-easy/wg-easy:15.5.0 \
   -e WG_ADMIN_USER=admin -e WG_ADMIN_PASSWORD="$PASSWORD" \
   "$VPN" bash /vpn-user-data.sh > vpn-user-data.log 2>&1 \
   || { echo "vpn-user-data.sh FAILED, last lines:"; tail -30 vpn-user-data.log; exit 1; }
@@ -52,6 +52,7 @@ cfg="$(curl -s -u "admin:$P" "$api/client/1/configuration")"
 echo "$cfg" | sed 's/^PrivateKey.*/PrivateKey = (hidden)/; s/^PresharedKey.*/PresharedKey = (hidden)/; s/^/      /'
 t "device config: split tunnel (VPC only)" grep -q '^AllowedIPs = 172.31.0.0/16$' <<<"$cfg"
 t "device config: endpoint is the EIP"     grep -q '^Endpoint = 203.0.113.10:51820$' <<<"$cfg"
+t "device config: DNS is the VPC resolver"  grep -q '^DNS = 172.31.0.2$' <<<"$cfg"
 t "device config: plain WireGuard (no AmneziaWG)" bash -c '! grep -qE "^(Jc|S1|H1) " <<<"$1"' _ "$cfg"
 t "wg0 interface up in container"     docker exec wg-easy wg show wg0
 if [ "$fail" != 0 ]; then

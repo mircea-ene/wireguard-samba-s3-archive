@@ -14,13 +14,23 @@ output "wg_easy_url" {
 }
 
 output "fileserver_private_ip" {
-  description = "Map network drives to \\\\<this>\\Projects etc. (through the VPN)."
+  description = "Private IP of the file server (changes when the instance is replaced)."
   value       = aws_instance.fileserver.private_ip
+}
+
+output "fileserver_address" {
+  description = "Use this for mapped drives: the private DNS name, or the IP when private_domain is null."
+  value       = local.fileserver_address
+}
+
+output "network_drives" {
+  description = "Paths to map in Windows (through the VPN)."
+  value       = { for share in ["Projects", "Uploads", "Archive"] : share => "\\\\${local.fileserver_address}\\${share}" }
 }
 
 output "cockpit_url" {
   description = "Cockpit admin (through the VPN). Self-signed certificate."
-  value       = "https://${aws_instance.fileserver.private_ip}:9090"
+  value       = "https://${local.fileserver_address}:9090"
 }
 
 output "fileserver_instance_id" {
