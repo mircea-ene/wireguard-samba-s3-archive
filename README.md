@@ -183,3 +183,7 @@ rclone cache matters for files people open often.
   next step and needs `s3:PutObject` (still no delete) on the server role.
 - Samba `full_audit` logging for sensitive zones is not set up yet.
 - The iperf3 port is for the PoC only.
+
+## License
+
+[MIT](LICENSE)
