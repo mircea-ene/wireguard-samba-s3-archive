@@ -10,3 +10,4 @@ admin_cidr = "203.0.113.10/32"
 
 # Optional, off when not set:
 # backup_retention_days = 7                    # daily snapshots of the data volume
+# alarm_email           = "you@example.com"    # instance down, disk full, S3 budget alerts

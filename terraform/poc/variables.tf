@@ -121,3 +121,26 @@ variable "backup_retention_days" {
     error_message = "backup_retention_days must be a whole number from 1 to 1000, or null."
   }
 }
+
+variable "alarm_email" {
+  type        = string
+  description = "Email address for alerts (instance down, data disk almost full, S3 over budget). null = no monitoring."
+  default     = null
+
+  validation {
+    condition     = var.alarm_email == null || can(regex("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", var.alarm_email))
+    error_message = "alarm_email must be an email address, or null."
+  }
+}
+
+variable "disk_alarm_percent" {
+  type        = number
+  description = "Alert when the data volume is fuller than this (used only with alarm_email)."
+  default     = 85
+}
+
+variable "s3_monthly_budget_usd" {
+  type        = number
+  description = "Monthly S3 spend that triggers a budget alert (used only with alarm_email)."
+  default     = 20
+}

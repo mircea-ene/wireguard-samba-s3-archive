@@ -137,14 +137,18 @@ Then:
 
 Tear down with `terraform destroy` (the PoC bucket has `force_destroy`).
 
-## Optional: backups
+## Optional: backups and monitoring
 
-Off by default to keep demos simple. Set it in `terraform.tfvars`:
+Both are off by default to keep demos simple. Set them in `terraform.tfvars`:
 
 | Variable                | Effect when set                                                        |
 |-------------------------|------------------------------------------------------------------------|
 | `backup_retention_days` | Daily snapshot of the data volume at 02:00 UTC (Data Lifecycle Manager), kept this many days. |
+| `alarm_email`           | Email alerts: either instance down, data volume over `disk_alarm_percent` (85) full, S3 spend over `s3_monthly_budget_usd` (20). |
 
+- Confirm the subscription email AWS sends after the first apply.
+- The disk alert uses the CloudWatch agent, installed through Systems
+  Manager, so turning monitoring on or off does not replace the instance.
 - Turning backups off keeps the existing snapshots until you delete them.
 
 ## Cost (eu-central-1, on demand, approximate)
@@ -163,7 +167,7 @@ rclone cache matters for files people open often.
 ## PoC limits and next steps
 
 - Data volume 30 GB. Production: larger volume, and set
-  `backup_retention_days`.
+  `backup_retention_days` and `alarm_email`.
 - wg-easy UI over plain HTTP, restricted to one IP. Production: TLS in
   front of it, or reach it only through the tunnel.
 - The archive is read-only from the server. Ingest is manual
